@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: tinyurl
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/url_db}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+#  liquibase:
+#    change-log: classpath:/liquibase/changelog/changelog.yml
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+server:
+  port: ${SERVER_PORT:8080}
