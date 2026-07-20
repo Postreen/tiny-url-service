@@ -1,0 +1,41 @@
+# IDE files
+.idea/
+**/.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Build and tool output
+target/
+**/target/
+build/
+**/build/
+out/
+**/out/
+bin/
+**/bin/
+.gradle/
+**/.gradle/
+.kotlin/
+.kotlinc/
+nbbuild/
+**/nbbuild/
+nbdist/
+**/nbdist/
+dist/
+**/dist/
+nbproject/private/
+**/nbproject/private/
+
+# Eclipse/STS
+.classpath
+.project
+.settings/
+.factorypath
+.apt_generated
+.springBeans
+.sts4-cache
+
+# OS
+.DS_Store
