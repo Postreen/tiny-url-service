@@ -23,4 +23,19 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(response);
     }
+
+    @ExceptionHandler(ShortCodeAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleShortCodeAlreadyExists(
+            ShortCodeAlreadyExistsException exception
+    ) {
+
+        ErrorResponse response = new ErrorResponse(
+                exception.getMessage(),
+                Instant.now()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(response);
+    }
 }

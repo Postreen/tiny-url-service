@@ -1,6 +1,7 @@
-package ru.emobile.tinyurl.domain.generator;
+package ru.emobile.tinyurl.domain.generator.impl;
 
 import org.springframework.stereotype.Component;
+import ru.emobile.tinyurl.domain.generator.ShortCodeGenerator;
 
 import java.math.BigInteger;
 import java.util.UUID;
@@ -11,32 +12,35 @@ public class UuidBase62Generator implements ShortCodeGenerator {
     private static final String BASE62 =
             "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
+    private static final int LENGTH = 8;
+
     @Override
     public String generate() {
+
         UUID uuid = UUID.randomUUID();
-        BigInteger number = uuidToBigInteger(uuid);
-        return encode(number);
+        BigInteger value = new BigInteger(
+                uuid.toString()
+                        .replace("-", ""),
+                16
+        );
+
+        return encode(value)
+                .substring(0, LENGTH);
     }
 
 
-    private BigInteger uuidToBigInteger(UUID uuid) {
-        String hex = uuid.toString()
-                .replace("-", "");
-        return new BigInteger(hex, 16);
-    }
-
-
-    private String encode(BigInteger number) {
+    private String encode(BigInteger value) {
         StringBuilder result = new StringBuilder();
         BigInteger base = BigInteger.valueOf(62);
-        while (number.compareTo(BigInteger.ZERO) > 0) {
-            BigInteger[] divmod = number.divideAndRemainder(base);
+        while (value.compareTo(BigInteger.ZERO) > 0) {
+            BigInteger[] divmod =
+                    value.divideAndRemainder(base);
             result.append(
                     BASE62.charAt(
                             divmod[1].intValue()
                     )
             );
-            number = divmod[0];
+            value = divmod[0];
         }
         return result.reverse().toString();
     }

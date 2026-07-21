@@ -10,9 +10,5 @@ import java.util.Optional;
 public interface LinkRepository extends JpaRepository<Link, Long> {
     Optional<Link> findByShortCode(String shortCode);
 
-    Optional<Link> findByAlias(String alias);
-
     boolean existsByShortCode(String shortCode);
-
-    boolean existsByAlias(String alias);
 }

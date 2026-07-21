@@ -13,7 +13,7 @@ public record LinkCreateRequest(
         )
         String url,
 
-        String alias,
+        String shortCode,
         Instant expiresAt
 ) {
 }

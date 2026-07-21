@@ -18,14 +18,11 @@ public class Link extends BaseEntity {
     @Column(name = "original_url", nullable = false, length = 2048)
     private String originalUrl;
 
-    @Column(name = "short_code", nullable = false, unique = true, length = 32)
+    @Column(name = "short_code", unique = true, length = 32)
     private String shortCode;
 
     @Column(name = "expires_at")
     private Instant expiresAt;
-
-    @Column(name = "alias", unique = true)
-    private String alias;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
