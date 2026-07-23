@@ -25,18 +25,32 @@ public class LinkApplicationService {
 
     @Transactional
     public LinkResponse create(LinkCreateRequest request) {
+        log.info("Creating link. url={}, shortCode={}",
+                request.url(),
+                request.shortCode()
+        );
 
         Link link = factory.create(request);
+
         linkPersistenceService.save(link);
+
+        log.info("Link created. id={}, shortCode={}",
+                link.getId(),
+                link.getShortCode()
+        );
 
         return mapper.toResponse(link);
     }
 
     @Transactional(noRollbackFor = LinkExpiredException.class)
     public String getOriginalUrl(String code) {
+        log.info("Getting original URL. shortCode={}", code);
+
         Link link = linkPersistenceService.findByShortCode(code);
 
         linkExpirationChecker.check(link);
+
+        log.info("Redirect resolved. shortCode={}", code);
 
         return link.getOriginalUrl();
     }

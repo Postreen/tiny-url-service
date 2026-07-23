@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping
 public interface RedirectApi {
 
-
     @Operation(
             summary = "Redirect by short code",
             description = "Redirects user to original URL"
