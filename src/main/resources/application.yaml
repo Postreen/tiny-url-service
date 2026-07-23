@@ -5,11 +5,11 @@ spring:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/url_db}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD:postgres}
-#  liquibase:
-#    change-log: classpath:/liquibase/changelog/changelog.yml
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     open-in-view: false
 
 logging:
