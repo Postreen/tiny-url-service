@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.emobile.tinyurl.domain.enums.Status;
+import ru.emobile.tinyurl.domain.entity.enums.Status;
 
 import java.time.Instant;
 

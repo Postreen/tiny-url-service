@@ -1,4 +1,4 @@
-package ru.emobile.tinyurl.mapper;
+package ru.emobile.tinyurl.application.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.emobile.tinyurl.api.dto.LinkResponse;

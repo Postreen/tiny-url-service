@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import ru.emobile.tinyurl.service.LinkService;
+import ru.emobile.tinyurl.application.service.LinkApplicationService;
 
 import java.net.URI;
 
@@ -14,13 +14,14 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class RedirectController {
 
-    private final LinkService linkService;
+    private final LinkApplicationService linkApplicationService;
 
     @GetMapping("/{code}")
     public ResponseEntity<Void> redirect(
             @PathVariable String code
     ) {
-        String url = linkService.getOriginalUrl(code);
+        String url = linkApplicationService.getOriginalUrl(code);
+
         return ResponseEntity
                 .status(HttpStatus.FOUND)
                 .location(URI.create(url))

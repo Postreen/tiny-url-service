@@ -38,4 +38,19 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(response);
     }
+
+    @ExceptionHandler(LinkExpiredException.class)
+    public ResponseEntity<ErrorResponse> handleExpired(
+            LinkExpiredException exception
+    ) {
+
+        return ResponseEntity
+                .status(HttpStatus.GONE)
+                .body(
+                        new ErrorResponse(
+                                exception.getMessage(),
+                                Instant.now()
+                        )
+                );
+    }
 }

@@ -3,8 +3,6 @@ package ru.emobile.tinyurl.api.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
-import java.time.Instant;
-
 public record LinkCreateRequest(
         @NotBlank(message = "URL must not be empty")
         @Pattern(
@@ -14,6 +12,6 @@ public record LinkCreateRequest(
         String url,
 
         String shortCode,
-        Instant expiresAt
+        Long ttlMinutes
 ) {
 }

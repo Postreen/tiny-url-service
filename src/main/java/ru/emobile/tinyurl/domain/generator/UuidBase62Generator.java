@@ -1,7 +1,6 @@
-package ru.emobile.tinyurl.domain.generator.impl;
+package ru.emobile.tinyurl.domain.generator;
 
 import org.springframework.stereotype.Component;
-import ru.emobile.tinyurl.domain.generator.ShortCodeGenerator;
 
 import java.math.BigInteger;
 import java.util.UUID;
