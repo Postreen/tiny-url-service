@@ -6,20 +6,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import ru.emobile.tinyurl.api.contract.RedirectApi;
 import ru.emobile.tinyurl.application.service.LinkApplicationService;
 
 import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
-public class RedirectController {
+public class RedirectController implements RedirectApi {
 
     private final LinkApplicationService linkApplicationService;
 
-    @GetMapping("/{code}")
-    public ResponseEntity<Void> redirect(
-            @PathVariable String code
-    ) {
+
+    @Override
+    public ResponseEntity<Void> redirect(String code) {
+
         String url = linkApplicationService.getOriginalUrl(code);
 
         return ResponseEntity
