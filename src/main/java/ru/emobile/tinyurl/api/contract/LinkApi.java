@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.emobile.tinyurl.api.dto.LinkCreateRequest;
 import ru.emobile.tinyurl.api.dto.LinkResponse;
@@ -35,7 +36,7 @@ public interface LinkApi {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    LinkResponse create(
+    ResponseEntity<LinkResponse> create(
             @Valid @RequestBody LinkCreateRequest request
     );
 }

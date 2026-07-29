@@ -6,90 +6,59 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.emobile.tinyurl.api.dto.LinkCreateRequest;
+import ru.emobile.tinyurl.domain.command.CreateLinkCommand;
 import ru.emobile.tinyurl.domain.entity.Link;
 import ru.emobile.tinyurl.domain.expiration.ExpirationCalculator;
-import ru.emobile.tinyurl.domain.resolver.ShortCodeResolver;
+import ru.emobile.tinyurl.util.LinkTestFactory;
 
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class LinkFactoryTest {
-    @Mock
-    private ExpirationCalculator expirationCalculator;
 
     @Mock
-    private ShortCodeResolver shortCodeResolver;
+    private ExpirationCalculator expirationCalculator;
 
     @InjectMocks
     private LinkFactory factory;
 
-
     @Test
-    @DisplayName("Должен создать Link с пользовательским URL, shortCode и временем жизни")
+    @DisplayName("Должен создать ссылку с указанным URL, shortCode и временем окончания")
     void shouldCreateLinkWithExpiration() {
-        LinkCreateRequest request = new LinkCreateRequest(
-                "https://google.com",
-                "google",
-                60L
-        );
+        CreateLinkCommand command = LinkTestFactory.defaultCreateCommand();
 
         Instant expiresAt = Instant.parse("2026-07-23T15:00:00Z");
 
-        when(shortCodeResolver.resolve("google")).thenReturn("google");
-        when(expirationCalculator.calculateExpiration(60L)).thenReturn(expiresAt);
+        when(expirationCalculator.calculateExpiration(60L))
+                .thenReturn(expiresAt);
 
-        Link link = factory.create(request);
+        Link link = factory.create(command);
 
         assertThat(link.getOriginalUrl()).isEqualTo("https://google.com");
-        assertThat(link.getShortCode()).isEqualTo("google");
+        assertThat(link.getShortCode()).isEqualTo("abc123");
         assertThat(link.getExpiresAt()).isEqualTo(expiresAt);
 
-        verify(shortCodeResolver).resolve("google");
         verify(expirationCalculator).calculateExpiration(60L);
     }
 
     @Test
-    @DisplayName("Должен создать вечную ссылку если TTL не указан")
+    @DisplayName("Должен создать ссылку без срока действия, если TTL не указан")
     void shouldCreatePermanentLinkWithoutExpiration() {
-        LinkCreateRequest request = new LinkCreateRequest(
-                "https://google.com",
-                null,
-                null
-        );
+        CreateLinkCommand command = LinkTestFactory.permanentCreateCommand();
 
-        when(shortCodeResolver.resolve(null)).thenReturn("abc123");
-        when(expirationCalculator.calculateExpiration(null)).thenReturn(null);
+        when(expirationCalculator.calculateExpiration(null))
+                .thenReturn(null);
 
-        Link link = factory.create(request);
+        Link link = factory.create(command);
 
         assertThat(link.getOriginalUrl()).isEqualTo("https://google.com");
         assertThat(link.getShortCode()).isEqualTo("abc123");
         assertThat(link.getExpiresAt()).isNull();
 
-        verify(shortCodeResolver).resolve(null);
         verify(expirationCalculator).calculateExpiration(null);
-    }
-
-    @Test
-    @DisplayName("Должен передавать shortCode из resolver, а не использовать значение напрямую")
-    void shouldUseResolvedShortCode() {
-        LinkCreateRequest request = new LinkCreateRequest(
-                "https://example.com",
-                "custom",
-                null
-        );
-
-        when(shortCodeResolver.resolve("custom"))
-                .thenReturn("generated");
-
-        Link link = factory.create(request);
-
-        assertThat(link.getShortCode()).isEqualTo("generated");
-
-        verify(shortCodeResolver).resolve("custom");
     }
 }

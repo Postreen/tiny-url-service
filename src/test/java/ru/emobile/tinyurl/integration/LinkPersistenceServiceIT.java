@@ -1,4 +1,4 @@
-package ru.emobile.tinyurl.application.persistence;
+package ru.emobile.tinyurl.integration;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +9,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
+import ru.emobile.tinyurl.application.persistence.LinkPersistenceService;
 import ru.emobile.tinyurl.domain.entity.Link;
 import ru.emobile.tinyurl.exception.LinkNotFoundException;
 import ru.emobile.tinyurl.util.LinkTestFactory;
@@ -24,7 +25,7 @@ class LinkPersistenceServiceIT {
     @Container
     @ServiceConnection
     static PostgreSQLContainer<?> postgres =
-            new PostgreSQLContainer<>("postgres:16");
+            new PostgreSQLContainer<>("postgres:17");
 
     @Autowired
     private LinkPersistenceService persistenceService;

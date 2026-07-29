@@ -6,12 +6,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.emobile.tinyurl.api.dto.LinkCreateRequest;
 import ru.emobile.tinyurl.api.dto.LinkResponse;
+import ru.emobile.tinyurl.application.mapper.LinkMapper;
 import ru.emobile.tinyurl.application.persistence.LinkPersistenceService;
+import ru.emobile.tinyurl.domain.command.CreateLinkCommand;
 import ru.emobile.tinyurl.domain.entity.Link;
 import ru.emobile.tinyurl.domain.expiration.LinkExpirationChecker;
 import ru.emobile.tinyurl.domain.factory.LinkFactory;
 import ru.emobile.tinyurl.exception.LinkExpiredException;
-import ru.emobile.tinyurl.application.mapper.LinkMapper;
 
 @Slf4j
 @Service
@@ -22,35 +23,36 @@ public class LinkApplicationService {
     private final LinkExpirationChecker linkExpirationChecker;
     private final LinkFactory factory;
     private final LinkMapper mapper;
+    private final ShortCodeCreationService shortCodeCreationService;
 
     @Transactional
     public LinkResponse create(LinkCreateRequest request) {
-        log.info("Creating link. url={}, shortCode={}",
-                request.url(),
-                request.shortCode()
-        );
 
-        Link link = factory.create(request);
+        String shortCode = shortCodeCreationService.create(request.shortCode());
+
+        CreateLinkCommand command =
+                new CreateLinkCommand(
+                        request.url(),
+                        shortCode,
+                        request.ttlMinutes()
+                );
+
+        Link link = factory.create(command);
 
         linkPersistenceService.save(link);
 
-        log.info("Link created. id={}, shortCode={}",
-                link.getId(),
-                link.getShortCode()
-        );
+        log.info("Link created. id={}, shortCode={}", link.getId(), link.getShortCode());
 
         return mapper.toResponse(link);
     }
 
+
     @Transactional(noRollbackFor = LinkExpiredException.class)
     public String getOriginalUrl(String code) {
-        log.info("Getting original URL. shortCode={}", code);
 
         Link link = linkPersistenceService.findByShortCode(code);
 
         linkExpirationChecker.check(link);
-
-        log.info("Redirect resolved. shortCode={}", code);
 
         return link.getOriginalUrl();
     }

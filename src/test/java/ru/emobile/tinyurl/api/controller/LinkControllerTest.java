@@ -55,7 +55,7 @@ class LinkControllerTest {
                                         }
                                         """)
                 )
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.shortCode")
                         .value("abc123"))
                 .andExpect(jsonPath("$.originalUrl")

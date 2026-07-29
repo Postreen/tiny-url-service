@@ -12,5 +12,12 @@ spring:
       ddl-auto: validate
     open-in-view: false
 
+app:
+  base-url: http://localhost:8080
+  scheduler:
+    link-expiration:
+      fixed-rate: 1m
+
+
 server:
   port: ${SERVER_PORT:8080}

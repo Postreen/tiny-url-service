@@ -1,5 +1,6 @@
 package ru.emobile.tinyurl.util;
 
+import ru.emobile.tinyurl.domain.command.CreateLinkCommand;
 import ru.emobile.tinyurl.domain.entity.Link;
 import ru.emobile.tinyurl.domain.entity.enums.Status;
 
@@ -10,6 +11,7 @@ public final class LinkTestFactory {
 
     private static final String DEFAULT_URL = "https://google.com";
     private static final String DEFAULT_CODE = "abc123";
+    private static final Long DEFAULT_TTL = 60L;
 
     private LinkTestFactory() {
     }
@@ -68,21 +70,20 @@ public final class LinkTestFactory {
         );
     }
 
-    public static Link linkWithUrl(String url) {
-        return createLink(
-                url,
+
+    public static CreateLinkCommand defaultCreateCommand() {
+        return new CreateLinkCommand(
+                DEFAULT_URL,
                 DEFAULT_CODE,
-                Status.ACTIVE,
-                null
+                DEFAULT_TTL
         );
     }
 
-    public static Link expiredLinkWithCode(String code) {
-        return createLink(
+    public static CreateLinkCommand permanentCreateCommand() {
+        return new CreateLinkCommand(
                 DEFAULT_URL,
-                code,
-                Status.EXPIRED,
-                Instant.now().minusSeconds(3600)
+                DEFAULT_CODE,
+                null
         );
     }
 
