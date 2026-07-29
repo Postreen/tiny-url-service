@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-add-links-indexes
+      author: Artem Sazonov
+
+      changes:
+        - createIndex:
+            tableName: links
+            indexName: idx_links_status_expires_at
+            columns:
+              - column:
+                  name: status
+              - column:
+                  name: expires_at
